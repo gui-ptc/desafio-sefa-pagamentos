@@ -8,7 +8,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@RestController
+@RequestMapping("/api/pagamentos")
 public class PagamentosController {
+	
+	private final PagamentoService pagamento Service;
+	
+	public PagamentosController(PagamentoService pagamentoService) {
+		this.pagamentoService = pagamentoService;
+	}
 	
 	@PostMapping
     public ResponseEntity<PagamentoResponse> receberPagamento(
@@ -38,9 +46,10 @@ public class PagamentosController {
 	}
 
 	@DeleteMapping("/{idPagamento}")
-	public void excluirPagamento(
+	public ResponseEntity<Void> excluirPagamento(
 			@PathVariable int idPagamento) {
 		pagamentoService.excluirPagamento(idPagamento);
+		return ResponseEntity.noContent().build();
 	}
 }
 
