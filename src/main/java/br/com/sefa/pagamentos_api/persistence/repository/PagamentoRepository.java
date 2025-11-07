@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Integer>{
 	Pagamento findByIdPagamento(Integer idPagamento);
-	List<Pagamento> findByCodDebitoAndCpfCnpjAndStatuPagamento(Integer codigoDebito, String cpfCnpj, EnumStatusPagamento statusPagamento);
+	List<Pagamento> findByCodDebitoAndCpfCnpjAndStatusPagamento(Integer codigoDebito, String cpfCnpj, EnumStatusPagamento statusPagamento);
 	List<Pagamento> findByCodDebitoAndCpfCnpj(Integer codigoDebito, String cpfCnpj);
 	List<Pagamento> findByCodDebitoAndStatusPagamento(Integer codigoDebito, EnumStatusPagamento statuPagamento);
 	List<Pagamento> findByCodDebito(Integer codigoDebito);

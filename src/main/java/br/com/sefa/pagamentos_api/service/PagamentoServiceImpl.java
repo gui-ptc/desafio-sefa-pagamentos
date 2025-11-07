@@ -12,7 +12,11 @@ import br.com.sefa.pagamentos_api.persistence.repository.PagamentoRepository;
 @Service
 public class PagamentoServiceImpl implements PagamentoService{
 
-	private final PagamentoRepository pagamentoRepository = null; 
+	private final PagamentoRepository pagamentoRepository;
+	
+	public PagamentoServiceImpl(PagamentoRepository pagamentoRepository) {
+        this.pagamentoRepository = pagamentoRepository;
+    }
 	
 	@Override
 	public Pagamento receberPagamento(Pagamento pagamento) {
@@ -34,7 +38,7 @@ public class PagamentoServiceImpl implements PagamentoService{
 		else if(filtroRequest.codigoDebito() != null &&
 				filtroRequest.cpfCnpj() != null &&
 				filtroRequest.statusPagamento() != null)
-			return pagamentoRepository.findByCodDebitoAndCpfCnpjAndStatuPagamento(
+			return pagamentoRepository.findByCodDebitoAndCpfCnpjAndStatusPagamento(
 					filtroRequest.codigoDebito(), filtroRequest.cpfCnpj(),
 						EnumStatusPagamento.getEnumStatusPagamento(filtroRequest.statusPagamento()));
 		
