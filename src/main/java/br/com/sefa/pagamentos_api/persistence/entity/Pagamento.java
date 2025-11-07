@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import br.com.sefa.pagamentos_api.persistence.entity.enums.EnumMetodoPagamento;
+import br.com.sefa.pagamentos_api.persistence.entity.enums.EnumStatusPagamento;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,7 +33,30 @@ public class Pagamento implements Serializable{
 	@Column(name = "metodo_pagamento")
 	private EnumMetodoPagamento metodoPagamento;
     
-    @Column(name = "numero_cartao")
+    @NotNull
+	@Column(name = "status_pagamento")
+	private EnumStatusPagamento statusPagamento;
+
+	@Column(name = "inativo")
+	private Boolean inativo = false;
+
+    public EnumStatusPagamento getStatusPagamento() {
+		return statusPagamento;
+	}
+
+	public void setStatusPagamento(EnumStatusPagamento statusPagamento) {
+		this.statusPagamento = statusPagamento;
+	}
+
+	public Boolean getInativo() {
+		return inativo;
+	}
+
+	public void setInativo(Boolean inativo) {
+		this.inativo = inativo;
+	}
+
+	@Column(name = "numero_cartao")
     private String numeroCartao;
 	
     @Column(name = "valor_pagamento")

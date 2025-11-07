@@ -1,32 +1,26 @@
 package br.com.sefa.pagamentos_api.persistence.entity.enums;
 
 public enum EnumMetodoPagamento {
-    BOLETO(0, "Boleto"), 
-    PIX(1, "Pix"), 
-    CARTAO_CREDITO(2, "Cartão de Crédito"),
-    CARTAO_DEBITO(3, "Cartão de Débito"); 
+    BOLETO(0), 
+    PIX(1), 
+    CARTAO_CREDITO(2),
+    CARTAO_DEBITO(3); 
 
 	private final Integer id;
-    private final String descricao;
 
-	public static EnumMetodoPagamento getEnumMetodoPagamento(Integer id) {
-        for (EnumMetodoPagamento metodoPagamento : EnumMetodoPagamento.values()) {
-            if (metodoPagamento.getId().equals(id)) {
-                return metodoPagamento;
+	public static EnumMetodoPagamento getEnumMetodoPagamento(String metodoPagamento) {
+        for (EnumMetodoPagamento metodo : EnumMetodoPagamento.values()) {
+            if (metodo.name().equals(metodoPagamento)) {
+                return metodo;
             }
         }
         return null;
     }
 
-	EnumMetodoPagamento(Integer id, String descricao) {
+	EnumMetodoPagamento(Integer id) {
 		this.id = id;
-	    this.descricao = descricao;
 	}
 	
-    public String getDescricao() {
-        return this.descricao;
-    }
-
     public Integer getId() {
         return id;
     }

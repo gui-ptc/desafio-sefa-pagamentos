@@ -1,51 +1,91 @@
 package br.com.sefa.pagamentos_api.service;
 
-import br.com.sefa.pagamentos_api.model.request.PagamentoRequest;
-import br.com.sefa.pagamentos_api.persistence.entity.Pagamento;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import br.com.sefa.pagamentos_api.model.request.FiltroRequest;
+import br.com.sefa.pagamentos_api.persistence.entity.Pagamento;
+import br.com.sefa.pagamentos_api.persistence.entity.enums.EnumStatusPagamento;
+import br.com.sefa.pagamentos_api.persistence.repository.PagamentoRepository;
+
+@Service
 public class PagamentoServiceImpl implements PagamentoService{
 
-	private final PagamentoRepository pagamentoRepository; 
+	private final PagamentoRepository pagamentoRepository = null; 
 	
 	@Override
-	public Pagamento receberPagamento(PagamentoRequest pagamentoRequest) {
-		Pagamento pagamento = new Pagamento();
-		pagamento.set
-		return pagamentoRepository.receberPagamento()
+	public Pagamento receberPagamento(Pagamento pagamento) {
+		return pagamentoRepository.save(pagamento);
 	}
 
 	@Override
-	public Pagamento atualizarPagamento(int idPagamento, String statusPagamento) {
-		returnLocale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
-		
-		//
-		
-		sc.close();
-		
+	public Pagamento atualizarPagamento(Pagamento pagamento) {
+		return pagamentoRepository.save(pagamento);
 	}
 
 	@Override
 	public List<Pagamento> listarPagamentos(FiltroRequest filtroRequest) {
-		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
+		if(filtroRequest.codigoDebito() == null &&
+				filtroRequest.cpfCnpj() == null &&
+				filtroRequest.statusPagamento() == null)
+			return pagamentoRepository.findAll();
 		
-		//
+		else if(filtroRequest.codigoDebito() != null &&
+				filtroRequest.cpfCnpj() != null &&
+				filtroRequest.statusPagamento() != null)
+			return pagamentoRepository.findByCodDebitoAndCpfCnpjAndStatuPagamento(
+					filtroRequest.codigoDebito(), filtroRequest.cpfCnpj(),
+						EnumStatusPagamento.getEnumStatusPagamento(filtroRequest.statusPagamento()));
 		
-		sc.close();
+		else if(filtroRequest.codigoDebito() != null &&
+				filtroRequest.cpfCnpj() != null &&
+				filtroRequest.statusPagamento() == null)
+			return pagamentoRepository.findByCodDebitoAndCpfCnpj(
+					filtroRequest.codigoDebito(), filtroRequest.cpfCnpj());
 		
+		else if(filtroRequest.codigoDebito() != null &&
+				filtroRequest.cpfCnpj() == null &&
+				filtroRequest.statusPagamento() != null)
+			return pagamentoRepository.findByCodDebitoAndStatusPagamento(
+					filtroRequest.codigoDebito(),
+					EnumStatusPagamento.getEnumStatusPagamento(filtroRequest.statusPagamento()));
+		
+		else if(filtroRequest.codigoDebito() != null &&
+				filtroRequest.cpfCnpj() == null &&
+				filtroRequest.statusPagamento() == null)
+			return pagamentoRepository.findByCodDebito(
+					filtroRequest.codigoDebito());
+		
+		else if(filtroRequest.codigoDebito() == null &&
+				filtroRequest.cpfCnpj() != null &&
+				filtroRequest.statusPagamento() == null)
+			return pagamentoRepository.findByCpfCnpj(
+					filtroRequest.cpfCnpj());
+		
+		else if(filtroRequest.codigoDebito() == null &&
+				filtroRequest.cpfCnpj() == null &&
+				filtroRequest.statusPagamento() != null)
+			return pagamentoRepository.findByStatusPagamento(
+					EnumStatusPagamento.getEnumStatusPagamento(filtroRequest.statusPagamento()));
+		
+		else if(filtroRequest.codigoDebito() == null &&
+				filtroRequest.cpfCnpj() != null &&
+				filtroRequest.statusPagamento() != null)
+			return pagamentoRepository.findByCpfCnpjAndStatusPagamento(filtroRequest.cpfCnpj(),
+					EnumStatusPagamento.getEnumStatusPagamento(filtroRequest.statusPagamento()));
+		return null;
 	}
 
 	@Override
-	public void excluirPagamento(int idPagamento) {
-		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
-		
-		//
-		
-		sc.close();
-		
+	public Pagamento excluirPagamento(Pagamento pagamento) {
+		pagamento.setInativo(true);
+		return pagamentoRepository.save(pagamento);
 	}
 
+	@Override
+	public Pagamento buscarPagamento(Integer idPagamento) {
+		return pagamentoRepository.findByIdPagamento(idPagamento);
+	}
 }
 
