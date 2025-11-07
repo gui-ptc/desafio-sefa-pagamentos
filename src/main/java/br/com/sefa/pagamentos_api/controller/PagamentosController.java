@@ -55,16 +55,18 @@ public class PagamentosController {
     public ResponseEntity<PagamentoResponse> atualizarPagamento(
             @PathVariable Integer idPagamento,
             @PathVariable String statusPagamento) {
-		if(EnumStatusPagamento.getEnumStatusPagamento(statusPagamento) == null)
-			throw new ResponseStatusException(UNPROCESSABLE_ENTITY, 
-					"O status informado '".concat(statusPagamento).
-						concat("' não existe."));
+		var novoStatus = EnumStatusPagamento.getEnumStatusPagamento(statusPagamento);
+		 if (novoStatus == null) {
+		        throw new ResponseStatusException(UNPROCESSABLE_ENTITY,
+		            "O status informado '" + statusPagamento + "' não existe.");
+		    }
 		Pagamento pagamento = pagamentoService.buscarPagamento(idPagamento);
 		if(pagamento == null)
 			throw new ResponseStatusException(NO_CONTENT, 
 					"O Pagamento de ID '".concat(String.valueOf(idPagamento)).concat("' não existe."));
-		pagamento = pagamentoService.atualizarPagamento(pagamento);
-        return ResponseEntity.status(HttpStatus.OK).body(new PagamentoResponse(pagamento));
+		 	pagamento.setStatusPagamento(novoStatus); 
+		    pagamento = pagamentoService.atualizarPagamento(pagamento);
+		    return ResponseEntity.ok(new PagamentoResponse(pagamento));
     }
 	
 	@GetMapping
