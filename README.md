@@ -1,6 +1,6 @@
 # Pagamentos API (Desafio SEFA)
 
-**Stack:** Java 17 · Spring Boot 3.5.7 · H2 · JPA
+**Stack:** Java 17 · Spring Boot 3.5.7 · Spring Web · H2 · Spring Data JPA
 
 ## Como rodar
 
@@ -9,22 +9,24 @@
 - Saúde: http://localhost:8080/ping  
 - Console H2: http://localhost:8080/h2  
   - **JDBC URL:** `jdbc:h2:mem:pagamentosdb`
+  - User: sa · Password: (vazio)
 
 ## Escopo do desafio
 - Receber pagamento (status inicial **PENDENTE_PROCESSAMENTO**).
-- Atualizar status (PENDENTE → SUCESSO/FALHA; FALHA → PENDENTE; SUCESSO = imutável).
+- Atualizar status via rota (aceita PROCESSADO_SUCESSO ou PROCESSADO_FALHA).
 - Listar pagamentos com filtros (código do débito, CPF/CNPJ, status).
 - Exclusão lógica (somente quando **PENDENTE_PROCESSAMENTO**).
 
 ## Decisões de implementação
-- Projeto mínimo, sem bibliotecas além do necessário.
-- Banco em memória (**H2**) para facilitar execução local.
-- JSON em todas as entradas/saídas.
-- Validações no DTO; regras de domínio no service.
+- API REST com JSON em todas as entradas/saídas.
+- Banco H2 em memória para facilitar execução local.
+- Regras aplicadas no controller, service responsável por persistência e filtros de busca.
+- Validações na entidade (Bean Validation/JPA).
+- Sem restrição de transições de status além da validação do enum.
 
 ## Endpoints (WIP)
-- `GET /ping` – saúde (**implementado**)
-- `POST /api/pagamentos` – criar pagamento (**em desenvolvimento**)
-- `PATCH /api/pagamentos/{id}/status` – atualizar status (**planejado**)
-- `GET /api/pagamentos` – listar + filtros (**planejado**)
-- `DELETE /api/pagamentos/{id}` – exclusão lógica (**planejado**)
+- `GET /ping` – saúde.
+- `POST /api/pagamentos` – criar pagamento.
+- `PATCH /api/pagamentos/{id}/status` – atualizar status.
+- `GET /api/pagamentos` – listar + filtros.
+- `DELETE /api/pagamentos/{id}` – exclusão lógica.
