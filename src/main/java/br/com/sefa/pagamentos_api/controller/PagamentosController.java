@@ -21,6 +21,8 @@ import br.com.sefa.pagamentos_api.persistence.entity.Pagamento;
 import br.com.sefa.pagamentos_api.persistence.entity.enums.EnumMetodoPagamento;
 import br.com.sefa.pagamentos_api.persistence.entity.enums.EnumStatusPagamento;
 import br.com.sefa.pagamentos_api.service.PagamentoService;
+import jakarta.validation.Valid;
+
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -36,14 +38,22 @@ public class PagamentosController {
 	
 	@PostMapping
     public ResponseEntity<PagamentoResponse> receberPagamento(
-            @RequestBody PagamentoRequest pagamentoRequest) {
+            @RequestBody @Valid PagamentoRequest pagamentoRequest) {
 		Pagamento pagamento = new Pagamento();
 		pagamento.setCodDebito(pagamentoRequest.codigoDebito());
 		pagamento.setCpfCnpj(pagamentoRequest.cpfCnpj());
+		var metodo = EnumMetodoPagamento.getEnumMetodoPagamento(pagamentoRequest.metodoPagamento());
+		if (metodo == null) {
+			throw new ResponseStatusException(UNPROCESSABLE_ENTITY,
+		    	"O método de pagamento informado '" + pagamentoRequest.metodoPagamento() + "' não existe.");
+		}		
+		
 		pagamento.setMetodoPagamento(EnumMetodoPagamento.getEnumMetodoPagamento(pagamentoRequest.metodoPagamento()));
-		if((pagamento.getMetodoPagamento().equals(EnumMetodoPagamento.CARTAO_CREDITO) ||
-			pagamento.getMetodoPagamento().equals(EnumMetodoPagamento.CARTAO_DEBITO)))
+		if(pagamento.getMetodoPagamento().equals(EnumMetodoPagamento.CARTAO_CREDITO) ||
+			pagamento.getMetodoPagamento().equals(EnumMetodoPagamento.CARTAO_DEBITO)) {
 			pagamento.setNumeroCartao(pagamentoRequest.numeroCartao());
+		}
+		
 		pagamento.setValorPagamento(pagamentoRequest.valorPagamento());
 		pagamento.setStatusPagamento(EnumStatusPagamento.PENDENTE_PROCESSAMENTO);
 
@@ -71,7 +81,7 @@ public class PagamentosController {
 	
 	@GetMapping
 	public ResponseEntity<List<PagamentoResponse>> listarPagamentos(
-			@RequestBody FiltroRequest filtroRequest) {
+			@RequestBody @Valid FiltroRequest filtroRequest) {
 		List<Pagamento> pagamentos = pagamentoService.listarPagamentos(filtroRequest);
 	    if (pagamentos == null) { 
 	    	return ResponseEntity.noContent().build();
