@@ -20,13 +20,13 @@
 ## Decisões de implementação
 - API REST com JSON em todas as entradas/saídas.
 - Banco H2 em memória para facilitar execução local.
-- Regras aplicadas no controller, service responsável por persistência e filtros de busca.
-- Validações na entidade (Bean Validation/JPA).
+- Controllers enxutos, regras de negócio no service (POST/PUT/DELETE), persistência e filtros via repository/Specification.
+- Validações em DTO's e entidade (Bean Validation/JPA).
 - Sem restrição de transições de status além da validação do enum.
 
 ## Endpoints (WIP)
 - `GET /ping` – saúde.
 - `POST /api/pagamentos` – criar pagamento.
-- `PATCH /api/pagamentos/{id}/status` – atualizar status.
+- `PUT /api/pagamentos/{id}/status` – atualizar status.
 - `GET /api/pagamentos` – listar + filtros.
 - `DELETE /api/pagamentos/{id}` – exclusão lógica.
